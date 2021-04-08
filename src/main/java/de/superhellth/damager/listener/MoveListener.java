@@ -41,6 +41,11 @@ public class MoveListener implements Listener {
                 dealDamage(standingOn, DamagerType.EXTREME);
                 break;
 
+            default:
+                int taskId = plugin.getDamages().getOrDefault(player, 0);
+                if (taskId != 0) {
+                    Bukkit.getScheduler().cancelTask(taskId);
+                }
         }
     }
 
@@ -53,7 +58,7 @@ public class MoveListener implements Listener {
                 plugin.joinGame(player, type);
             }
         }
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+        int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             @Override
             public void run() {
                 // Do something
@@ -61,6 +66,8 @@ public class MoveListener implements Listener {
                 player.damage(plugin.getGame(player).getDamage());
             }
         }, 0L, 20L);
+
+        plugin.getDamages().put(player, taskId);
     }
 
 }

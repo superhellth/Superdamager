@@ -20,9 +20,10 @@ public final class Damager extends JavaPlugin {
         return instance;
     }
 
-    private boolean isRunning;
+    private boolean isRunning = true;
     private final Map<DamagerGame, Set<Player>> games = new HashMap<>();
     private final Map<DamagerType, DamagerGame> gameDifs = new HashMap<>();
+    public final Map<Player, Integer> damages = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -95,5 +96,9 @@ public final class Damager extends JavaPlugin {
      */
     public void leaveGame(Player player) {
         games.get(getGame(player)).remove(player);
+    }
+
+    public Map<Player, Integer> getDamages() {
+        return damages;
     }
 }
