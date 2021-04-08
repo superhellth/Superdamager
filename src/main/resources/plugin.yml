@@ -1,0 +1,10 @@
+name: Damager
+version: ${project.version}
+main: de.superhellth.damager.Damager
+api-version: 1.16
+authors: [ superhellth ]
+description: A simple damager plugin
+
+commands:
+  superdamager:
+    aliases: sd
