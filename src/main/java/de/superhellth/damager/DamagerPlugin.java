@@ -18,14 +18,16 @@ public final class DamagerPlugin extends JavaPlugin {
 
     // file and directory names
     private final static String DAMAGER_FILE = "damager.yml";
-
+    private final static String DIFFICULTY_FILE = "difficulties.yml";
     // singleton pattern
     private static DamagerPlugin instance;
 
     // data files
     private final File damagerFile = new File(getDataFolder(), DAMAGER_FILE);
-    private YamlConfiguration damagerConfig;
+    private final File difficultyFile = new File(getDataFolder(), DIFFICULTY_FILE);
     private final File configFile = new File(getDataFolder(), "config.yml");
+    private YamlConfiguration damagerConfig;
+    private YamlConfiguration difficultyConfig;
 
     // data
     private final Set<Difficulty> difficulties = new HashSet<>();
@@ -42,11 +44,14 @@ public final class DamagerPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
         // Register command
         this.getCommand("superdamager").setExecutor(new DamagerCommand(this));
-        //writeDiff(new Difficulty("easy", 5, 20));
+
+        // Load config
         loadConfig();
         damagerConfig = YamlConfiguration.loadConfiguration(damagerFile);
+        difficultyConfig = YamlConfiguration.loadConfiguration(difficultyFile);
     }
 
     @Override
@@ -104,7 +109,7 @@ public final class DamagerPlugin extends JavaPlugin {
         int i = 1;
         while (true) {
             try {
-                Difficulty difficulty = new Difficulty(getConfig().getConfigurationSection("difficulty_" + i).getValues(false));
+                Difficulty difficulty = new Difficulty(difficultyConfig.getConfigurationSection("difficulty_" + i).getValues(false));
                 difficulties.add(difficulty);
             } catch (NullPointerException e) {
                 break;
@@ -121,6 +126,7 @@ public final class DamagerPlugin extends JavaPlugin {
         saveDefaultConfig();
         try {
             damagerFile.createNewFile();
+            difficultyFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
