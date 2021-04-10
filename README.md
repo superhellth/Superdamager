@@ -15,4 +15,8 @@ difficulty_1:
 /sd create _difficulty_ _radius_ 
 > This creates a square damager with the given difficulty and size
 > difficulty should be replaced with the difficulty name specified in the difficulties.yml
-> radius should be replaced with an integer to determine the size of the damager
+> radius should be replaced with an integer to determine the size of the damager  
+4. Get a list of all your damagers with /sd damagers  
+5. Get a list of all your difficulties with /sd difficulties  
+6. Remove a damager with /sd delete when standing nearby the damager  
+> Removes the nearest damager  
