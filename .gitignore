@@ -1,4 +1,11 @@
 # User-specific stuff
+server/*
+!server/plugins
+server/plugins
+!server/plugins/Superdamager.jar
+
+out/*
+
 .idea/
 
 *.iml
@@ -18,7 +25,7 @@ out/
 *.ctxt
 
 # Package Files #
-*.jar
+*.xml
 *.war
 *.nar
 *.ear

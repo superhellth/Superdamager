@@ -1,6 +1,6 @@
-name: Damager
+name: DamagerPlugin
 version: ${project.version}
-main: de.superhellth.damager.Damager
+main: de.superhellth.damager.DamagerPlugin
 api-version: 1.16
 authors: [ superhellth ]
 description: A simple damager plugin
