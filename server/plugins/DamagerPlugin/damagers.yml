@@ -1,0 +1,32 @@
+damager_0:
+  difficulty:
+    ==: de.superhellth.damager.main.Difficulty
+    damage: 3
+    name: easy
+    tick_rate: 20
+  center:
+    ==: org.bukkit.Location
+    world: world
+    x: -12.530748913144429
+    y: 62.0
+    z: 122.5569117683939
+    pitch: 0.0
+    yaw: 0.0
+  id: 0
+  radius: 6
+damager_1:
+  difficulty:
+    ==: de.superhellth.damager.main.Difficulty
+    damage: 3
+    name: hard
+    tick_rate: 10
+  center:
+    ==: org.bukkit.Location
+    world: world
+    x: 12.565314485337897
+    y: 62.0
+    z: 105.4277593173064
+    pitch: 0.0
+    yaw: 0.0
+  id: 1
+  radius: 5

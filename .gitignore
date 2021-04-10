@@ -1,8 +1,7 @@
 # User-specific stuff
 server/*
 !server/plugins
-server/plugins
-!server/plugins/Superdamager.jar
+server/plugins/PluginMetrics
 
 out/*
 
