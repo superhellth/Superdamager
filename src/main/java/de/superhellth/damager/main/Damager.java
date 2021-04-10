@@ -20,18 +20,18 @@ public class Damager implements ConfigurationSerializable {
     private final int radius;
     private final Difficulty difficulty;
 
-    public Damager(int id, Location center, int radius, Difficulty difficulty) {
-        this.id = id;
-        this.center = center;
-        this.radius = radius;
-        this.difficulty = difficulty;
-    }
-
     public Damager(Map<String, Object> serialized) {
         id = (int) serialized.get(ID);
         center = (Location) serialized.get(CENTER);
         radius = (int) serialized.get(RADIUS);
         difficulty = (Difficulty) serialized.get(DIFFICULTY);
+    }
+
+    public Damager(int id, Location center, int radius, Difficulty difficulty) {
+        this.id = id;
+        this.center = center;
+        this.radius = radius;
+        this.difficulty = difficulty;
     }
 
     public int getId() {
@@ -58,5 +58,11 @@ public class Damager implements ConfigurationSerializable {
         serialized.put(RADIUS, radius);
         serialized.put(DIFFICULTY, difficulty);
         return serialized;
+    }
+
+    @Override
+    public String toString() {
+        return "Damager " + id + " : At " + center.getBlockX() + ", " + center.getBlockY() + ", " + center.getBlockZ() + "\nRadius: " + radius
+                + "\nDifficulty: " + difficulty.getName();
     }
 }

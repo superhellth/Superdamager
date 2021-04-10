@@ -5,6 +5,7 @@ import de.superhellth.damager.command.DamagerCommand;
 import de.superhellth.damager.main.Damager;
 import de.superhellth.damager.main.Difficulty;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -17,7 +18,7 @@ import java.util.Set;
 public final class DamagerPlugin extends JavaPlugin {
 
     // file and directory names
-    private final static String DAMAGER_FILE = "damager.yml";
+    private final static String DAMAGER_FILE = "damagers.yml";
     private final static String DIFFICULTY_FILE = "difficulties.yml";
     // singleton pattern
     private static DamagerPlugin instance;
@@ -32,6 +33,7 @@ public final class DamagerPlugin extends JavaPlugin {
     // data
     private final Set<Difficulty> difficulties = new HashSet<>();
     private final Map<Integer, Damager> damagers = new HashMap<>();
+    private int damagerHeight;
 
     /**
      * Returns the current instance of the plugin.
@@ -45,13 +47,17 @@ public final class DamagerPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        // register serializable
+        ConfigurationSerialization.registerClass(Difficulty.class);
+        ConfigurationSerialization.registerClass(Damager.class);
+
         // Register command
         this.getCommand("superdamager").setExecutor(new DamagerCommand(this));
 
         // Load config
-        loadConfig();
         damagerConfig = YamlConfiguration.loadConfiguration(damagerFile);
         difficultyConfig = YamlConfiguration.loadConfiguration(difficultyFile);
+        loadConfig();
     }
 
     @Override
@@ -59,16 +65,11 @@ public final class DamagerPlugin extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    public void registerDamager(Damager damager) {
-        damagerConfig.createSection("damage_" + damager.getId(), damager.serialize());
-        try {
-            damagerConfig.save(damagerFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    // getter
+    public Set<Difficulty> getDifficulties() {
+        return difficulties;
     }
 
-    // getter
     public Difficulty getDifficulty(String name) {
         for (Difficulty difficulty : difficulties) {
             if (difficulty.getName().toLowerCase().equals(name)) {
@@ -76,6 +77,14 @@ public final class DamagerPlugin extends JavaPlugin {
             }
         }
         return null;
+    }
+
+    public Map<Integer, Damager> getDamagers() {
+        return damagers;
+    }
+
+    public int getDamagerHeight() {
+        return damagerHeight;
     }
 
     public int getFreeId() {
@@ -92,8 +101,34 @@ public final class DamagerPlugin extends JavaPlugin {
         return i;
     }
 
-    public Set<Difficulty> getDifficulties() {
-        return difficulties;
+
+    // Damager management
+    /**
+     * Registers the given damager.
+     * @param damager Damager to register
+     */
+    public void registerDamager(Damager damager) {
+        damagerConfig.createSection("damager_" + damager.getId(), damager.serialize());
+        damagers.put(damager.getId(), damager);
+        try {
+            damagerConfig.save(damagerFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Removes the given damager.
+     * @param damager Damager to remove
+     */
+    public void removeDamager(Damager damager) {
+        damagerConfig.set("damager_" + damager.getId(), null);
+        damagers.remove(damager.getId());
+        try {
+            damagerConfig.save(damagerFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // loading config
@@ -103,6 +138,7 @@ public final class DamagerPlugin extends JavaPlugin {
         }
         loadDifficulties();
         loadDamagers();
+        damagerHeight = getConfig().getInt("damager_height");
     }
 
     private void loadDifficulties() {
@@ -119,7 +155,16 @@ public final class DamagerPlugin extends JavaPlugin {
     }
 
     private void loadDamagers() {
-
+        int i = 0;
+        while (true) {
+            try {
+                Damager damager = new Damager(damagerConfig.getConfigurationSection("damager_" + i).getValues(false));
+                damagers.put(i, damager);
+            } catch (NullPointerException e) {
+                break;
+            }
+            i++;
+        }
     }
 
     private void createPluginDirectory() {
