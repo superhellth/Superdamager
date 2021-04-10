@@ -25,7 +25,6 @@ out/
 *.ctxt
 
 # Package Files #
-*.xml
 *.war
 *.nar
 *.ear
