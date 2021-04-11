@@ -1,5 +1,5 @@
 # Superdamager
-A mc-spigot damager plugin.
+A mc-spigot damager plugin. The .jar is in the server/plugins folder
 
 ## How to use  
 1. Start plugin once -> All neccessary .yml files will be created  
