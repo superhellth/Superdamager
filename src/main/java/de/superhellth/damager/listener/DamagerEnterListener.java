@@ -36,6 +36,7 @@ public class DamagerEnterListener implements Listener {
             player.removePotionEffect(effect.getType());
         }
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 99999, 0, false, false));
+        InventorySave.getDamagerKit(player);
         plugin.enterDamager(damager, player);
         int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             @Override
@@ -44,7 +45,6 @@ public class DamagerEnterListener implements Listener {
             }
         }, 10, difficulty.getTickRate());
         plugin.getDamageTasks().put(player, taskId);
-        Chat.sendMessage(player, "Damager entry");
     }
 
 
