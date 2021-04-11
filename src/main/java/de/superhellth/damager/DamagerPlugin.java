@@ -2,9 +2,7 @@ package de.superhellth.damager;
 
 import de.superhellth.damager.chat.Chat;
 import de.superhellth.damager.command.DamagerCommand;
-import de.superhellth.damager.listener.DamagerEnterListener;
-import de.superhellth.damager.listener.DamagerLeaveListener;
-import de.superhellth.damager.listener.PlayerMovementListener;
+import de.superhellth.damager.listener.*;
 import de.superhellth.damager.main.Damager;
 import de.superhellth.damager.main.Difficulty;
 import org.bukkit.Bukkit;
@@ -41,9 +39,10 @@ public final class DamagerPlugin extends JavaPlugin {
     // data
     private final Set<Difficulty> difficulties = new HashSet<>();
     private final Map<Integer, Damager> damagers = new HashMap<>();
-    private int damagerHeight;
     private final Map<Player, Damager> inDamager = new HashMap<>();
     private final Map<Player, Integer> damageTasks = new HashMap<>();
+    private int damagerHeight;
+    private int soupHeal;
 
     /**
      * Returns the current instance of the plugin.
@@ -68,6 +67,8 @@ public final class DamagerPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerMovementListener(this), this);
         Bukkit.getPluginManager().registerEvents(new DamagerEnterListener(this), this);
         Bukkit.getPluginManager().registerEvents(new DamagerLeaveListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new ItemDropListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new SoupListener(this), this);
 
         // Load config
         damagerConfig = YamlConfiguration.loadConfiguration(damagerFile);
@@ -105,6 +106,10 @@ public final class DamagerPlugin extends JavaPlugin {
 
     public int getDamagerHeight() {
         return damagerHeight;
+    }
+
+    public int getSoupHeal() {
+        return soupHeal;
     }
 
     public int getFreeId() {
@@ -182,6 +187,7 @@ public final class DamagerPlugin extends JavaPlugin {
         loadDifficulties();
         loadDamagers();
         damagerHeight = getConfig().getInt("damager_height");
+        soupHeal = getConfig().getInt("soup_heal");
     }
 
     private void loadDifficulties() {

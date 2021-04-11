@@ -1,18 +1,15 @@
 package de.superhellth.damager.listener;
 
 import de.superhellth.damager.DamagerPlugin;
-import de.superhellth.damager.chat.Chat;
 import de.superhellth.damager.event.DamagerEnterEvent;
 import de.superhellth.damager.main.Damager;
 import de.superhellth.damager.main.Difficulty;
-import de.superhellth.damager.serialization.SerializableInventory;
 import de.superhellth.damager.util.InventorySave;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -35,7 +32,9 @@ public class DamagerEnterListener implements Listener {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 99999, 0, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 7, 10, false, false));
+        player.setFoodLevel(18);
+        player.setSaturation(20);
         InventorySave.getDamagerKit(player);
         plugin.enterDamager(damager, player);
         int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {

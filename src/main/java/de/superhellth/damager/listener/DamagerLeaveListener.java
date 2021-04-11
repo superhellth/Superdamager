@@ -6,6 +6,8 @@ import de.superhellth.damager.event.DamagerLeaveEvent;
 import de.superhellth.damager.main.Damager;
 import de.superhellth.damager.util.InventorySave;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -14,6 +16,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+
+import java.util.List;
 
 public class DamagerLeaveListener implements Listener {
 
@@ -31,7 +35,7 @@ public class DamagerLeaveListener implements Listener {
     }
 
     @EventHandler
-    public void onDamager(PlayerDeathEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         if (plugin.getInDamager().get(player) != null) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -41,6 +45,12 @@ public class DamagerLeaveListener implements Listener {
                             true, false);
                     Bukkit.getPluginManager().callEvent(respawn);
                     leaveDamager(player, plugin.getInDamager().get(player));
+                    List<Entity> entities = player.getNearbyEntities(3, 2, 3);
+                    for (Entity entity : entities) {
+                        if (entity instanceof Item) {
+                            entity.remove();
+                        }
+                    }
                 }
             }, 10);
             event.setDeathMessage(null);
