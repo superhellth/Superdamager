@@ -6,6 +6,7 @@ import de.superhellth.damager.event.DamagerEnterEvent;
 import de.superhellth.damager.main.Damager;
 import de.superhellth.damager.main.Difficulty;
 import de.superhellth.damager.serialization.SerializableInventory;
+import de.superhellth.damager.util.InventorySave;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -29,15 +30,7 @@ public class DamagerEnterListener implements Listener {
         Damager damager = event.getDamager();
         Difficulty difficulty = damager.getDifficulty();
 
-        Inventory playerInv = player.getInventory();
-        plugin.getInventoryConfig().set(player.getName(), null);
-        for (int i = 0; i < 4 * 9; i++) {
-            try {
-                plugin.getInventoryConfig().createSection(player.getName() + "." + i, playerInv.getItem(i).serialize());
-            } catch (Exception ignored) {
-            }
-        }
-        plugin.saveInvs();
+        InventorySave.writeInv(player);
         player.setGameMode(GameMode.SURVIVAL);
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());

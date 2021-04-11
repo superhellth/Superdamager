@@ -1,4 +1,22 @@
 superhellth:
-  '4':
+  '0':
     v: 2586
-    type: NETHERITE_LEGGINGS
+    type: STONE_SWORD
+  '1':
+    v: 2586
+    type: BOW
+  o:
+    v: 2586
+    type: SHIELD
+  h:
+    v: 2586
+    type: CHAINMAIL_HELMET
+  c:
+    v: 2586
+    type: CHAINMAIL_CHESTPLATE
+  l:
+    v: 2586
+    type: CHAINMAIL_LEGGINGS
+  b:
+    v: 2586
+    type: CHAINMAIL_BOOTS

@@ -5,6 +5,7 @@ import de.superhellth.damager.chat.Chat;
 import de.superhellth.damager.event.DamagerLeaveEvent;
 import de.superhellth.damager.main.Damager;
 import de.superhellth.damager.serialization.SerializableInventory;
+import de.superhellth.damager.util.InventorySave;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,13 +30,7 @@ public class DamagerLeaveListener implements Listener {
         int taskId = plugin.getDamageTasks().get(player);
         Bukkit.getScheduler().cancelTask(taskId);
         plugin.getDamageTasks().remove(player);
-        for (int i = 0; i < 4 * 9; i++) {
-            try {
-                ItemStack item = ItemStack.deserialize(plugin.getInventoryConfig().getConfigurationSection(player.getName() + "." + i).getValues(false));
-                player.getInventory().setItem(i, item);
-            } catch (Exception ignored) {
-            }
-        }
+        InventorySave.readInv(player);
         Chat.sendMessage(player, "Damager leave");
     }
 
