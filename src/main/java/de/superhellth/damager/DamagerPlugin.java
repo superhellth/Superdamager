@@ -2,10 +2,15 @@ package de.superhellth.damager;
 
 import de.superhellth.damager.chat.Chat;
 import de.superhellth.damager.command.DamagerCommand;
+import de.superhellth.damager.listener.DamagerEnterListener;
+import de.superhellth.damager.listener.DamagerLeaveListener;
+import de.superhellth.damager.listener.PlayerMovementListener;
 import de.superhellth.damager.main.Damager;
 import de.superhellth.damager.main.Difficulty;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -20,20 +25,25 @@ public final class DamagerPlugin extends JavaPlugin {
     // file and directory names
     private final static String DAMAGER_FILE = "damagers.yml";
     private final static String DIFFICULTY_FILE = "difficulties.yml";
+    private final static String INVENTORY_FILE = "inventories.yml";
     // singleton pattern
     private static DamagerPlugin instance;
 
     // data files
     private final File damagerFile = new File(getDataFolder(), DAMAGER_FILE);
     private final File difficultyFile = new File(getDataFolder(), DIFFICULTY_FILE);
+    private final File inventoryFile = new File(getDataFolder(), INVENTORY_FILE);
     private final File configFile = new File(getDataFolder(), "config.yml");
     private YamlConfiguration damagerConfig;
     private YamlConfiguration difficultyConfig;
+    private YamlConfiguration inventoryConfig;
 
     // data
     private final Set<Difficulty> difficulties = new HashSet<>();
     private final Map<Integer, Damager> damagers = new HashMap<>();
     private int damagerHeight;
+    private final Map<Player, Damager> inDamager = new HashMap<>();
+    private final Map<Player, Integer> damageTasks = new HashMap<>();
 
     /**
      * Returns the current instance of the plugin.
@@ -54,9 +64,15 @@ public final class DamagerPlugin extends JavaPlugin {
         // Register command
         this.getCommand("superdamager").setExecutor(new DamagerCommand(this));
 
+        // Register listener
+        Bukkit.getPluginManager().registerEvents(new PlayerMovementListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new DamagerEnterListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new DamagerLeaveListener(this), this);
+
         // Load config
         damagerConfig = YamlConfiguration.loadConfiguration(damagerFile);
         difficultyConfig = YamlConfiguration.loadConfiguration(difficultyFile);
+        inventoryConfig = YamlConfiguration.loadConfiguration(inventoryFile);
         loadConfig();
     }
 
@@ -66,6 +82,10 @@ public final class DamagerPlugin extends JavaPlugin {
     }
 
     // getter
+    public YamlConfiguration getInventoryConfig() {
+        return inventoryConfig;
+    }
+
     public Set<Difficulty> getDifficulties() {
         return difficulties;
     }
@@ -101,6 +121,21 @@ public final class DamagerPlugin extends JavaPlugin {
         return i;
     }
 
+    public Map<Player, Damager> getInDamager() {
+        return inDamager;
+    }
+
+    public Map<Player, Integer> getDamageTasks() {
+        return damageTasks;
+    }
+
+    public void enterDamager(Damager damager, Player player) {
+        inDamager.put(player, damager);
+    }
+
+    public void leaveDamager(Damager damager, Player player) {
+        inDamager.remove(player);
+    }
 
     // Damager management
     /**
@@ -131,6 +166,14 @@ public final class DamagerPlugin extends JavaPlugin {
         }
     }
 
+    public void saveInvs() {
+        try {
+            inventoryConfig.save(inventoryFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // loading config
     private void loadConfig() {
         if (!configFile.exists()) {
@@ -155,15 +198,12 @@ public final class DamagerPlugin extends JavaPlugin {
     }
 
     private void loadDamagers() {
-        int i = 0;
-        while (true) {
+        for (int i = 0; i < 50; i++) {
             try {
                 Damager damager = new Damager(damagerConfig.getConfigurationSection("damager_" + i).getValues(false));
                 damagers.put(i, damager);
-            } catch (NullPointerException e) {
-                break;
+            } catch (NullPointerException ignored) {
             }
-            i++;
         }
     }
 
@@ -172,6 +212,7 @@ public final class DamagerPlugin extends JavaPlugin {
         try {
             damagerFile.createNewFile();
             difficultyFile.createNewFile();
+            inventoryFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
