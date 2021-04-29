@@ -38,21 +38,15 @@ public class DamagerLeaveListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         if (plugin.getInDamager().get(player) != null) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    Event respawn = new PlayerRespawnEvent(player, Bukkit.getServer().getWorld(player.getLocation().getWorld().getUID()).getSpawnLocation() ,
-                            true, false);
-                    Bukkit.getPluginManager().callEvent(respawn);
-                    leaveDamager(player, plugin.getInDamager().get(player));
-                    List<Entity> entities = player.getNearbyEntities(3, 2, 3);
-                    for (Entity entity : entities) {
-                        if (entity instanceof Item) {
-                            entity.remove();
-                        }
-                    }
+
+            leaveDamager(player, plugin.getInDamager().get(player));
+            List<Entity> entities = player.getNearbyEntities(3, 2, 3);
+            for (Entity entity : entities) {
+                if (entity instanceof Item) {
+                    entity.remove();
                 }
-            }, 10);
+            }
+            event.setKeepInventory(true);
             event.setDeathMessage(null);
         }
     }
@@ -63,6 +57,7 @@ public class DamagerLeaveListener implements Listener {
         Bukkit.getScheduler().cancelTask(taskId);
         plugin.getDamageTasks().remove(player);
         InventorySave.readInv(player);
+        player.chat("/suicide");
     }
 
 }

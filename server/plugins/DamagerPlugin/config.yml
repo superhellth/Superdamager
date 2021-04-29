@@ -1,2 +1,5 @@
 damager_height: 2
 soup_heal: 5
+bowl_slot: 13
+red_mushroom_slot: 14
+brown_mushroom_slot: 15

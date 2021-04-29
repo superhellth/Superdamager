@@ -93,13 +93,14 @@ public class InventorySave {
      * @param player To give items to
      */
     public static void getDamagerKit(Player player) {
+        DamagerPlugin plugin = DamagerPlugin.getInstance();
         player.getInventory().clear();
         for (int i = 0; i < 4 * 9; i++) {
             player.getInventory().setItem(i, new ItemStack(Material.MUSHROOM_STEW, 1));
         }
-        player.getInventory().setItem(15, new ItemStack(Material.BOWL, 16));
-        player.getInventory().setItem(16, new ItemStack(Material.RED_MUSHROOM, 16));
-        player.getInventory().setItem(17, new ItemStack(Material.BROWN_MUSHROOM, 16));
+        player.getInventory().setItem(plugin.getBowlSlot(), new ItemStack(Material.BOWL, 16));
+        player.getInventory().setItem(plugin.getRedMushroomSlot(), new ItemStack(Material.RED_MUSHROOM, 16));
+        player.getInventory().setItem(plugin.getBrownMushroomSlot(), new ItemStack(Material.BROWN_MUSHROOM, 16));
     }
 
 }

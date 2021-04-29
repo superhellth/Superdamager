@@ -1,22 +1,5 @@
 superhellth:
-  '0':
-    v: 2586
-    type: STONE_SWORD
-  '8':
-    v: 2586
-    type: CAKE
   o:
     v: 2586
-    type: SHIELD
-  h:
-    v: 2586
-    type: DIAMOND_HELMET
-  c:
-    v: 2586
-    type: DIAMOND_CHESTPLATE
-  l:
-    v: 2586
-    type: DIAMOND_LEGGINGS
-  b:
-    v: 2586
-    type: DIAMOND_BOOTS
+    type: AIR
+    amount: 0

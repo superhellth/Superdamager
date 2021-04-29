@@ -43,6 +43,9 @@ public final class DamagerPlugin extends JavaPlugin {
     private final Map<Player, Integer> damageTasks = new HashMap<>();
     private int damagerHeight;
     private int soupHeal;
+    private int bowlSlot;
+    private int redMushroomSlot;
+    private int brownMushroomSlot;
 
     /**
      * Returns the current instance of the plugin.
@@ -110,6 +113,18 @@ public final class DamagerPlugin extends JavaPlugin {
 
     public int getSoupHeal() {
         return soupHeal;
+    }
+
+    public int getBowlSlot() {
+        return bowlSlot;
+    }
+
+    public int getRedMushroomSlot() {
+        return redMushroomSlot;
+    }
+
+    public int getBrownMushroomSlot() {
+        return brownMushroomSlot;
     }
 
     public int getFreeId() {
@@ -188,6 +203,9 @@ public final class DamagerPlugin extends JavaPlugin {
         loadDamagers();
         damagerHeight = getConfig().getInt("damager_height");
         soupHeal = getConfig().getInt("soup_heal");
+        bowlSlot = getConfig().getInt("bowl_slot");
+        redMushroomSlot = getConfig().getInt("red_mushroom_slot");
+        brownMushroomSlot = getConfig().getInt("brown_mushroom_slot");
     }
 
     private void loadDifficulties() {

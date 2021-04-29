@@ -25,7 +25,7 @@ public class ItemDropListener implements Listener {
                 public void run() {
                     event.getItemDrop().remove();
                 }
-            }, 2);
+            },  10 * 20);
         }
     }
 }
